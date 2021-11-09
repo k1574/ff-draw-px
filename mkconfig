@@ -1,0 +1,5 @@
+<$MKINCDIR/config
+PROGNAME = ff-draw-px
+INCS = -I$INCDIR/
+CFILES = main.c
+AFILES = $OBJDIR/ff.a
