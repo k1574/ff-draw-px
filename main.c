@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <ff/ff.h>
+#include <sl/arg.h>
 
 #define D if(0)
 
@@ -21,7 +22,7 @@ const char *seps = "\n\t " ;
 void
 usage(void)
 {
-	fprintf(stderr, "usage: %s <width> <height>\n", argv0);
+	fprintf(stderr, "usage: %s [-f fg] [-b bg] <width> <height>\n", argv0);
 	exit(1);
 }
 
@@ -50,16 +51,28 @@ strchm(char *s, char c)
 }
 
 int
-main(int argc, char *argv[])
+main(int argc, char **argv)
 {
 	FFPixel *pix;
 	char *tok;
 	argv0 = argv[0] ;
-	if(argc < 3)
+
+	ARGBEGIN {
+	case 'b' :
+		stdbgstr = EARGF(usage()) ;
+	break;
+	case 'f' :
+		stdfgstr = EARGF(usage()) ;
+	break;
+	default:
+		usage();
+	} ARGEND ;
+
+	if(argc != 2)
 		usage();
 
-	w = atoi(argv[1]) ;
-	h = atoi(argv[2]) ;
+	w = atoi(argv[0]) ;
+	h = atoi(argv[1]) ;
 
 	ff_colorname_to_pixel(&stdfg, stdfgstr);
 	ff_colorname_to_pixel(&stdbg, stdbgstr);
